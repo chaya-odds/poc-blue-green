@@ -19,6 +19,8 @@ jobs:
     - name: Build the Docker image
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        IMAGE_TAG=${{ github.sha }}
-        docker build . --file Dockerfile.green --tag ghcr.io/${{ github.repository }}/green-web:$IMAGE_TAG
-        docker push ghcr.io/${{ github.repository }}/green-web:$IMAGE_TAG
+        IMAGE_TAG=green-${{ github.sha }}
+        docker build . --file Dockerfile.green --tag ghcr.io/${{ github.repository }}:$IMAGE_TAG
+        docker tag ghcr.io/${{ github.repository }}:$IMAGE_TAG ghcr.io/${{ github.repository }}:green-latest
+        docker push ghcr.io/${{ github.repository }}:$IMAGE_TAG
+        docker push ghcr.io/${{ github.repository }}:green-latest
